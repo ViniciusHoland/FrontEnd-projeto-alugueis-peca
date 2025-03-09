@@ -1,22 +1,55 @@
 import "./LoginPage.css";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
+import api from "../../services/api"
 
 function LoginPage() {
     const [errorMessage, setErrorMessage] = useState("");
-
+    const inputEmail = useRef(null)
+    const inputPassword = useRef(null)
+    const navigate = useNavigate()
     
 
     const login = async () =>{
 
-        setErrorMessage('usuario ou senha invalidos')
+        try{
+
+            const email = inputEmail.current.value;
+            const password = inputPassword.current.value;
+
+            if(!email.includes("@") || !email.includes(".")){
+                alert("Email inválido");
+                return;
+            }
+            if(password.length < 8){
+                alert("A senha deve ser maior que 8 caracteres ");
+                return;
+              }
+        
+
+            const response = await api.post('/login', {email, password})
+
+            console.log(response)
+
+            localStorage.setItem('token', response.data.token)
+            setErrorMessage('')
+
+            alert('Login successful')
+            navigate('/')
+
+        } catch (err) {
+            setErrorMessage(err.response.data)
+            console.error("Error: ", err.response.data);
+        }
+
+
     }
 
     return (
         <div className="container">
             <div className="branding">
                 <img alt="Invest Logo" className="logo" />
-                <h1>INVEST POPULATION SOFTWARE</h1>
+                <h1>Alugue Loc SOFTWARE</h1>
                 <hr />
             </div>
             <div className="login-box">
@@ -25,8 +58,8 @@ function LoginPage() {
                 </div>
 
                 <form>
-                    <input type="email" placeholder="Email" required />
-                    <input type="password" placeholder="Senha" required />
+                    <input type="email" placeholder="Email" ref={inputEmail} required />
+                    <input type="password" placeholder="Senha" ref={inputPassword} required />
                     <button type="button" onClick={login}>Login</button>
                     <a href="#">Esqueceu a senha?</a>
                 </form>

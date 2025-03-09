@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import "./RegisterPage.css";
 import api from "../services/api";
+import {Link} from 'react-router-dom'
 
 function RegisterPage() {
   const inputName = useRef(null);
@@ -71,9 +72,12 @@ function RegisterPage() {
             REGISTER
           </button>
         </form>
-        <a href="/login" className="login-link">
-          Already have an account? Login
-        </a>
+        <div>
+          <Link to={"/login"}>
+            Faça Login
+          </Link>
+        </div>
+      
       </div>
     </div>
   );
