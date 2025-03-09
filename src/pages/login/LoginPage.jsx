@@ -35,7 +35,7 @@ function LoginPage() {
             setErrorMessage('')
 
             alert('Login successful')
-            navigate('/')
+            navigate('/home')
 
         } catch (err) {
             setErrorMessage(err.response.data)
