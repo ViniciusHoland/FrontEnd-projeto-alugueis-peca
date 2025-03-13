@@ -41,9 +41,17 @@ function HomePage() {
         });
       };
 
+
+      const getAllAlugueisCliente = async (idCliente) => {
+        return console.log(idCliente)
+      }
+
     useEffect(() => {
         getAllAlugueis();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+
+
 
     return (
   
@@ -54,13 +62,15 @@ function HomePage() {
       </p>
       <div className="pricing-cards">
 
-        {alugueis.map(aluguel => (
+        {alugueis.filter(aluguel => aluguel.status === "aberto").map(aluguel => (
+          
             <div key={aluguel.id} className="card">
                 <h2>{aluguel.nomeCliente}</h2>
                 <p className="price">R$ {aluguel.valorTotal}</p>
                 {aluguel.itens.map(item => (
                     <ul key={item.id}>
                         <p className="card-subtitle">{item.peca}</p>
+                        <li>Status: {aluguel.status}</li>
                         <li>Quantidade: {item.quantidade}</li>
                         <li>ValorUnitario: R$ {item.precoUnitario}</li>
                         <li>Retirada: {formatData(aluguel.dataInicio.split('T')[0])}</li>
@@ -68,7 +78,7 @@ function HomePage() {
                     </ul>   
                  
            ))}
-            <button className="btn">➝</button>
+            <button className="btn" onClick={() => getAllAlugueisCliente(aluguel.idCliente)} >➝</button>
             </div>
         ))}
 
