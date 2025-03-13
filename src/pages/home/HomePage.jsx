@@ -1,10 +1,12 @@
 import "./HomePage.css";
 import api from "../../services/api";
 import { useState, useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
     const [alugueis, setAlugueis] = useState([]);
     const [alugueisTotal, setAlugueisTotal] = useState(null);
+    const navigate = useNavigate();
 
     const getAllAlugueis = async () => {
         try {
@@ -42,9 +44,7 @@ function HomePage() {
       };
 
 
-      const getAllAlugueisCliente = async (idCliente) => {
-        return console.log(idCliente)
-      }
+      
 
     useEffect(() => {
         getAllAlugueis();
@@ -78,7 +78,7 @@ function HomePage() {
                     </ul>   
                  
            ))}
-            <button className="btn" onClick={() => getAllAlugueisCliente(aluguel.idCliente)} >➝</button>
+            <button className="btn" onClick={() => navigate(`/alugueis/cliente/${aluguel.idCliente}`)} >➝</button>
             </div>
         ))}
 

@@ -1,0 +1,120 @@
+.status-aberto {
+    
+    font-size: 15px;
+    color: green;
+    font-weight: bold;
+  }
+  
+  .status-fechado {
+    font-size: 15px;
+    color: red;
+    font-weight: bold;
+  }
+
+/* Estilização geral */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #e0e0e0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Card de cada aluguel */
+.aluguel-card {
+    width: 80%;
+    background: #f4f4f4;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Nome do Cliente */
+.cliente-nome {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Tabela */
+.tabela {
+    width: 100%;
+}
+
+.tabela-header, .tabela-linha {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 0.5fr;
+    gap: 10px;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Cabeçalho */
+.tabela-header {
+    background: #4caf50;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Linhas */
+.tabela-linha {
+    background: #a8e6cf;
+    border-bottom: 2px solid white;
+    padding: 12px;
+    border-radius: 5px;
+}
+
+.peca {
+    font-weight: bold;
+    background: #64b5f6;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+/* Ações */
+.acoes {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Botões */
+.btn {
+    width: 35px;
+    height: 35px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+.btn-close {
+    background: #e57373;
+    color: white;
+}
+
+.btn-print {
+    background: #81c784;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
