@@ -2,7 +2,9 @@ import "./AlugueisCliente.css"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../services/api"
-import axios from "axios";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 
 
 
@@ -23,7 +25,7 @@ function AlugueisClientePage() {
                     return;
                 }
 
-                const response = await api.get(`/alugueis/cliente/${idCliente}`,{
+                const response = await api.get(`/alugueis/cliente/${idCliente}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -58,7 +60,7 @@ function AlugueisClientePage() {
 
     const fecharStatus = async (aluguelId) => {
 
-        try{
+        try {
 
             const token = localStorage.getItem('token')
 
@@ -68,9 +70,9 @@ function AlugueisClientePage() {
             }
 
 
-            
 
-            const closedAluguel = await api.put(`/alugueis/${aluguelId}`, {status: "fechado"}, {
+
+            const closedAluguel = await api.put(`/alugueis/${aluguelId}`, { status: "fechado" }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -86,7 +88,7 @@ function AlugueisClientePage() {
             console.log(closedAluguel.data)
 
 
-        }  catch (err) {
+        } catch (err) {
             console.error("Erro ao fechar status do aluguel: ", err.response.data);
             alert("Erro ao fechar status do aluguel");
             return;
@@ -94,6 +96,106 @@ function AlugueisClientePage() {
 
 
 
+    }
+
+    const imprimirPDF = async (aluguel) => {
+
+        try {
+
+            console.log(aluguel)
+
+            const doc = new jsPDF({
+                orientation: "landscape",
+                unit: "mm",
+                format: [100, 180] // Define o tamanho do recibo (10 cm x 14 cm)
+            });
+
+            // 📌 Cabeçalho
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(16);
+            doc.text("CAMILOS CONSTRUÇÕES",50,10)
+
+            doc.setFontSize(10);
+            doc.text("(84) 9 9965-2007", 50, 15);
+            doc.text("ENDEREÇO DA SUA LOJA", 50, 20);
+            doc.text('-------------------------------------',50,25)
+
+            const data = new Date().toLocaleString()
+            
+            doc.setFont("helvetica", "normal");
+            doc.text(`Emissão: ${data}`, 10, 30);
+            doc.text(`Fone: ${aluguel.telefone}`, 60, 30);
+            doc.text(`Cliente: ${aluguel.nomeCliente}`, 10, 35);
+            doc.text(`Endereço: ${aluguel.endereco.rua}, ${aluguel.endereco.numero}, ${aluguel.endereco.bairro}`, 10, 40);
+
+            let valorTotal = 0
+
+            // 📌 Tabela de produtos/serviços
+            const colunas = ["Qtd", "Descrição", "Retirada", "Entrega", "Dias", "Unit", "Total"];
+            const dados = aluguel.itens.map((item) => [
+                item.quantidade,
+                item.peca,
+                new Date(aluguel.dataInicio).toLocaleDateString("pt-BR"),
+                new Date(aluguel.dataFim).toLocaleDateString("pt-BR"),
+                aluguel.quantidadeDias,
+                `R$ ${item.precoUnitario}`,
+                `R$ ${(item.quantidade * item.precoUnitario).toFixed(2)}`,
+                valorTotal += item.quantidade * item.precoUnitario
+            ]);
+
+            autoTable(doc, {
+                startY: 45, // Define onde começa a tabela
+                head: [colunas],
+                body: dados,
+                theme: "grid",
+                tableWidth: "auto",
+                styles: { fontSize: 10, cellPadding: 2 },
+                columnStyles: {
+                    0: { cellWidth: 10, halign: "center" },  // Qtd.
+                    1: { cellWidth: 35, halign: "left" },  // Descrição
+                    2: { cellWidth: 25, halign: "left" },  // retirada
+                    3: { cellWidth: 25, halign: "left" },  // entrega
+                    4: { cellWidth: 15, halign: "left" },  // tot dias 
+                    5: { cellWidth: 20, halign: "rigth" },  // Unit.
+                    6: { cellWidth: 20, halign: "rigth" }   // Total
+                }
+            });
+
+            // 📌 Total
+            let finalY = doc.lastAutoTable.finalY + 5; // Posição após a tabela
+            doc.text(`Total: R$ ${(valorTotal).toFixed(2)}`, 133, finalY);
+
+            // 📌 Assinaturas
+            doc.text("_____________________", 10, finalY + 15);
+            doc.text("Ass. Comprador", 15, finalY + 20);
+
+            doc.text("_____________________", 60, finalY + 15);
+            doc.text("Assinatura Loja", 65, finalY + 20);
+
+            // 📌 Observações
+            doc.setFontSize(8);
+            doc.text(
+                "Nossos produtos e serviços têm garantia de __ meses.\nNossa garantia não cobre mau uso, quedas e desgastes naturais.",
+                10,
+                finalY + 30
+            );
+
+
+
+            const pdfBlob = doc.output("blob")
+            const pdfUrl = URL.createObjectURL(pdfBlob)
+            const newWindow = window.open(pdfUrl)
+
+            if (newWindow) {
+                newWindow.onload = () => newWindow.print();
+            }
+
+
+        } catch (err) {
+            console.error("Erro ao imprimir PDF: ", err.message);
+            alert("Erro ao imprimir PDF");
+            return;
+        }
     }
 
 
