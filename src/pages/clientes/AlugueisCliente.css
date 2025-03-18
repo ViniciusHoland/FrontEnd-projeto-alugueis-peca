@@ -57,7 +57,7 @@ body {
 
 .tabela-header, .tabela-linha {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 0.5fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0.5fr;
     gap: 10px;
     align-items: center;
     text-align: center;
@@ -70,6 +70,7 @@ body {
     color: white;
     font-weight: bold;
     border-radius: 8px 8px 0 0;
+
 }
 
 /* Linhas */
@@ -88,23 +89,26 @@ body {
     color: white;
 }
 
-/* Ações */
+/* Alinha melhor os botões */
 .acoes {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 5px;
 }
 
-/* Botões */
 .btn {
-    width: 35px;
+    width: 35px; /* Mantém os botões pequenos e alinhados */
     height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     cursor: pointer;
     border-radius: 5px;
     font-size: 18px;
 }
 
+/* Cores dos botões */
 .btn-close {
     background: #e57373;
     color: white;

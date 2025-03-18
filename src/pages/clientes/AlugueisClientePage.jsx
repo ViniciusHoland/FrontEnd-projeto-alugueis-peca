@@ -55,40 +55,35 @@ function AlugueisClientePage() {
     return (
 
         <div className="container">
-            {alugueis.map(aluguel => (
-                <div key={aluguel.id} className="aluguel-card">
-                    <h2 className="cliente-nome">{aluguel.nomeCliente}</h2>
-
-                    <div className="tabela">
-                        {/* Cabeçalho */}
-                        <div className="tabela-header">
-                            <span>Peça</span>
-                            <span>Quantidade</span>
-                            <span>Data Entrega</span>
-                            <span>Data Saída</span>
-                            <span>Ações</span>
-                        </div>
-
-                        {/* Linhas de itens */}
-                        {aluguel.itens.map(item => (
-                            <div key={item.id} className="tabela-linha">
-                                <span className="peca">{item.peca}</span>
-                                <span>{item.quantidade}</span>
-                                <span>{formatData(aluguel.dataInicio.split('T')[0])}</span>
-                                <span>{formatData(aluguel.dataFim.split('T')[0])}</span>
-                                <div className="acoes">
-                                    <button className="btn btn-close" onClick={() => fecharStatus(aluguel.id)}>
-                                        ❌
-                                    </button>
-                                    <button className="btn btn-print" onClick={() => imprimirPDF(aluguel)}>
-                                        🖨️
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+            <h2 className="titulo-tabela">Lista de Aluguéis</h2>
+            <div className="tabela">
+                {/* Cabeçalho único */}
+                <div className="tabela-header">
+                    <span>Cliente</span>
+                    <span>Peça</span>
+                    <span>Quantidade</span>
+                    <span>Data Entrega</span>
+                    <span>Data Saída</span>
+                    <span>Ações</span>
                 </div>
-            ))}
+
+                {/* Corpo da tabela */}
+                {alugueis.map(aluguel =>
+                    aluguel.itens.map(item => (
+                        <div key={item.id} className="tabela-linha">
+                            <span className="cliente-nome">{aluguel.nomeCliente}</span>
+                            <span className="peca">{item.peca}</span>
+                            <span>{item.quantidade}</span>
+                            <span>{formatData(aluguel.dataInicio.split('T')[0])}</span>
+                            <span>{formatData(aluguel.dataFim.split('T')[0])}</span>
+                            <div className="acoes">
+                                <button className="btn btn-close" onClick={() => fecharStatus(aluguel.id)}>❌</button>
+                                <button className="btn btn-print" onClick={() => imprimirPDF(aluguel)}>🖨️</button>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
         </div>
 
 
