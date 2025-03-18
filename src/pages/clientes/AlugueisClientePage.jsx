@@ -2,6 +2,7 @@ import "./AlugueisCliente.css"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../services/api"
+import axios from "axios";
 
 
 
@@ -22,7 +23,7 @@ function AlugueisClientePage() {
                     return;
                 }
 
-                const response = await api.get(`/alugueis/cliente/${idCliente}`, {
+                const response = await api.get(`/alugueis/cliente/${idCliente}`,{
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -39,6 +40,8 @@ function AlugueisClientePage() {
             }
         }
 
+
+
         getAllAlugueisCliente()
 
     }, [idCliente])
@@ -50,6 +53,48 @@ function AlugueisClientePage() {
             year: 'numeric'
         });
     };
+
+
+
+    const fecharStatus = async (aluguelId) => {
+
+        try{
+
+            const token = localStorage.getItem('token')
+
+            if (!token) {
+                alert("Token não encontrado");
+                return;
+            }
+
+
+            
+
+            const closedAluguel = await api.put(`/alugueis/${aluguelId}`, {status: "fechado"}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if (closedAluguel.status === 200) {
+                alert("Status do aluguel fechado com sucesso!");
+                setAlugueis(alugueis.filter(a => a.id !== aluguelId));
+            } else {
+                alert("Erro ao fechar status do aluguel");
+            }
+
+            console.log(closedAluguel.data)
+
+
+        }  catch (err) {
+            console.error("Erro ao fechar status do aluguel: ", err.response.data);
+            alert("Erro ao fechar status do aluguel");
+            return;
+        }
+
+
+
+    }
 
 
     return (
@@ -77,7 +122,7 @@ function AlugueisClientePage() {
                             <span>{formatData(aluguel.dataInicio.split('T')[0])}</span>
                             <span>{formatData(aluguel.dataFim.split('T')[0])}</span>
                             <div className="acoes">
-                                <button className="btn btn-close" onClick={() => fecharStatus(aluguel.id)}>❌</button>
+                                <button className="btn btn-close" onClick={() => fecharStatus(aluguel.idAluguel)}>❌</button>
                                 <button className="btn btn-print" onClick={() => imprimirPDF(aluguel)}>🖨️</button>
                             </div>
                         </div>
