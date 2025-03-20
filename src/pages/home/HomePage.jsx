@@ -1,6 +1,6 @@
 import "./HomePage.css";
 import api from "../../services/api";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function HomePage() {
@@ -68,9 +68,44 @@ function HomePage() {
 
     try{
 
-      
+     
 
-      console.log(formData)
+      
+        const token = localStorage.getItem('token')
+
+        if (!token) {
+            alert("Token não encontrado");
+            return;
+        }
+        
+
+        const idCliente = formData.clienteId
+        const idPeca = formData.idPeca
+        const quantidade = formData.quantidade
+        const dataInicio = new Date(formData.dataInicio).toISOString().split('T')[0]
+        const dataFim = new Date(formData.dataFim).toISOString().split('T')[0]
+
+
+        const response = await api.post('/alugueis/registro', {
+
+               idCliente,
+               idPeca,
+               quantidade,
+               dataInicio,
+               dataFim
+
+            }, 
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+      
+      )
+
+      console.log(response)
+      alert("Aluguel cadastrado com sucesso!")
+      navigate('/home')
 
 
 

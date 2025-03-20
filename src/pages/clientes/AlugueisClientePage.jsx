@@ -163,7 +163,7 @@ function AlugueisClientePage() {
 
             // 📌 Total
             let finalY = doc.lastAutoTable.finalY + 5; // Posição após a tabela
-            doc.text(`Total: R$ ${(valorTotal).toFixed(2)}`, 133, finalY);
+            doc.text(`Total: R$ ${(valorTotal).toFixed(2)}`, 140, finalY);
 
             // 📌 Assinaturas
             doc.text("_____________________", 10, finalY + 15);
