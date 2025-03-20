@@ -138,9 +138,9 @@ function AlugueisClientePage() {
                 new Date(aluguel.dataInicio).toLocaleDateString("pt-BR"),
                 new Date(aluguel.dataFim).toLocaleDateString("pt-BR"),
                 aluguel.quantidadeDias,
-                `R$ ${item.precoUnitario}`,
-                `R$ ${(item.quantidade * item.precoUnitario).toFixed(2)}`,
-                valorTotal += item.quantidade * item.precoUnitario
+                `R$ ${item.precoUnitario }`,
+                `R$ ${(item.quantidade * item.precoUnitario * aluguel.quantidadeDias).toFixed(2)}`,
+                valorTotal += item.quantidade * item.precoUnitario * aluguel.quantidadeDias
             ]);
 
             autoTable(doc, {
@@ -157,7 +157,7 @@ function AlugueisClientePage() {
                     3: { cellWidth: 25, halign: "left" },  // entrega
                     4: { cellWidth: 15, halign: "left" },  // tot dias 
                     5: { cellWidth: 20, halign: "rigth" },  // Unit.
-                    6: { cellWidth: 20, halign: "rigth" }   // Total
+                    6: { cellWidth: 25, halign: "rigth" }   // Total
                 }
             });
 
