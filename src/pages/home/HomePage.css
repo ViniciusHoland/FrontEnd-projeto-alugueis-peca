@@ -1,166 +1,96 @@
 html, body {
-  overflow: auto; /* Permite rolagem */
-  height: auto; /* Remove restrições de altura */
+  overflow: auto; /* Permite a rolagem */
+  height: 100%;
 }
+
 
 .container {
-  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 900px;
   margin: 20px auto;
   padding: 20px;
-  overflow: hidden; /* Evita que elementos causem scroll lateral */
-}
-
-
-/* Configurações gerais */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
-}
-
-/* Container principal */
-.container {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 20px;
-}
-
-/* 🔹 Formulário de Cadastro */
-.form-container {
-  background-color: #fff;
-  padding: 20px;
+  background-color: #f8f8f8;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
-  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-container h2 {
+.form-container {
+  width: 100%;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
   text-align: center;
-  color: #2a9d8f;
-  margin-bottom: 20px;
+  color: #004d40;
 }
 
 .form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-  color: #264653;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-input[type="radio"] {
-  width: auto;
-  margin-right: 5px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
 }
 
 .radio-group {
   display: flex;
-  align-items: center;
   gap: 10px;
-  margin-top: 5px;
 }
 
-/* 🔹 Botão do formulário */
 .btn-submit {
   width: 100%;
-  background-color: #2a9d8f;
-  color: white;
-  font-size: 1.2rem;
   padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn-submit:hover {
-  background-color: #21867a;
-}
-
-/* 🔹 Tabela de Aluguéis */
-.pricing-container {
-  text-align: center;
-  background-color: #2a9d8f;
-  padding: 40px 20px;
+  background: #4caf50;
   color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pricing-container {
+  width: 100%;
+  margin-top: 20px;
 }
 
 .pricing-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-}
-
-.pricing-subtitle {
-  font-size: 1rem;
-  margin: 10px auto 30px;
-  max-width: 600px;
+  text-align: center;
+  color: #004d40;
 }
 
 .pricing-cards {
   display: flex;
-  justify-content: center;
-  gap: 20px;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
 }
 
 .card {
-  background-color: #e9f5f3;
-  color: #2a9d8f;
-  padding: 20px;
-  border-radius: 10px;
-  width: 250px;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.card h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+  width: 300px; /* Ajustei a largura para que os cards fiquem iguais */
+  min-height: 180px; /* Para manter a altura similar */
 }
 
 .price {
-  font-size: 2rem;
+  font-size: 18px;
   font-weight: bold;
-  color: #264653;
+  color: #2e7d32;
 }
 
-.card ul {
-  list-style: none;
-  padding: 0;
-  margin-bottom: 20px;
-}
+/* Ajustando para telas menores */
+@media (max-width: 768px) {
+  .pricing-cards {
+    flex-direction: column;
+    align-items: center;
+  }
 
-.card ul li {
-  padding: 5px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-/* Botão de navegação */
-.btn {
-  background: none;
-  border: 2px solid #2a9d8f;
-  color: #2a9d8f;
-  font-size: 1.2rem;
-  padding: 10px 15px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  background-color: #2a9d8f;
-  color: white;
+  .card {
+    width: 90%; /* Ocupa mais espaço em telas menores */
+  }
 }

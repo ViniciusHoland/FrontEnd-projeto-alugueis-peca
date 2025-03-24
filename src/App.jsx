@@ -3,6 +3,7 @@ import RegisterPage from './pages/ResgisterPage'
 import LoginPage from './pages/login/LoginPage'
 import HomePage from './pages/home/HomePage'
 import AlugueisClientePage from "./pages/clientes/AlugueisClientePage"
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
  
