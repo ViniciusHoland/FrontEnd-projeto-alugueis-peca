@@ -17,15 +17,17 @@ function LoginPage() {
             const email = inputEmail.current.value;
             const password = inputPassword.current.value;
 
-            if(!email.includes("@") || !email.includes(".")){
-                alert("Email inválido");
-                return;
+            if(email != "SUPER"){
+                if(!email.includes("@") || !email.includes(".")){
+                    alert("Email inválido");
+                    return;
+                }
+                if(password.length < 8){
+                    alert("A senha deve ser maior que 8 caracteres ");
+                    return;
+                  }
             }
-            if(password.length < 8){
-                alert("A senha deve ser maior que 8 caracteres ");
-                return;
-              }
-        
+
 
             const response = await api.post('/login', {email, password})
 

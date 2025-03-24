@@ -38,7 +38,7 @@ function AlugueisClientePage() {
                 alert("Token não encontrado");
                 return;
             }
-            await api.put(`/alugueis/${aluguelId}`, { status: "fechado" }, {
+            await api.put(`/alugueis/status/${aluguelId}`, { status: "fechado" }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert("Status do aluguel fechado com sucesso!");
