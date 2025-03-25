@@ -19,6 +19,8 @@ function HomePage() {
   const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [editandoId, setEditandoId] = useState(null); // Estado para armazenar ID do aluguel sendo editado
+  const [termoBusca, setTermoBusca] = useState("")
+  const [clientes, setClientes] = useState([])
 
   const [formData, setFormData] = useState({
     clienteId: "",
@@ -27,6 +29,32 @@ function HomePage() {
     dataInicio: "",
     dataFim: "",
   });
+
+
+
+  const buscarClientes = async () => {
+    try{
+
+      if(!termoBusca) {
+         return
+      }
+      const token = localStorage.getItem("token");
+
+      if(!token) {
+        alert("Token não encontrado");
+        return;
+      }
+
+      const response = await api.get(`/clientes/busca?nome=${termoBusca}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+
+      setClientes(response.data)
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      alert("Erro ao buscar clientes");
+    }
+  }
 
   const getAllAlugueis = async () => {
     try {
@@ -72,7 +100,7 @@ function HomePage() {
 
       const { clienteId, idPeca, quantidade, dataInicio, dataFim } = formData;
 
-  
+
 
       if (editandoId) {
         const aluguelId = editandoId
@@ -98,9 +126,9 @@ function HomePage() {
         await api.post(
           "/alugueis/registro",
           {
-            clienteId,
+            idCliente: clienteId,
             idPeca,
-            quantidade, 
+            quantidade,
             dataInicio: new Date(dataInicio).toISOString().split("T")[0],
             dataFim: new Date(dataFim).toISOString().split("T")[0],
           },
@@ -110,11 +138,11 @@ function HomePage() {
             },
           }
         );
-  
+
         alert("Aluguel cadastrado com sucesso!");
       }
 
-    
+
       setFormData({
         clienteId: "",
         idPeca: "",
@@ -161,9 +189,43 @@ function HomePage() {
             onSubmit={cadastrarOuEditarAluguel}
             className="p-4 border rounded shadow-sm bg-light"
           >
+            {/* Campo de busca de cliente */}
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Label>Buscar Cliente</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Digite o nome do cliente"
+                  value={termoBusca}
+                  onChange={(e) => setTermoBusca(e.target.value)}
+                />
+              </Col>
+              <Col md={3} className="d-flex align-items-end">
+                <Button variant="primary" onClick={buscarClientes}>
+                  Buscar
+                </Button>
+              </Col>
+            </Row>
+
+            {/* Exibir lista de clientes encontrados */}
+            {clientes.length > 0 && (
+              <ul className="list-group mt-2">
+                {clientes.map((cliente) => (
+                  <li
+                    key={cliente.id}
+                    className="list-group-item list-group-item-action"
+                    onClick={() => setFormData({ ...formData, clienteId: cliente.id })}
+                  >
+                    {cliente.nome} - ID: {cliente.id}
+                  </li>
+                ))}
+              </ul>
+            )}
+
             <Row className="mb-3">
               <Col md={2}>
                 <Form.Label>ID do Cliente</Form.Label>
+
                 <Form.Control
                   type="number"
                   name="clienteId"
