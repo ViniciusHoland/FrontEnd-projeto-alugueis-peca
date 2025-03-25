@@ -24,7 +24,7 @@ function AlugueisClientePage() {
             const response = await api.get(`/alugueis/cliente/${idCliente}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setAlugueis(response.data.alugueis);
+            setAlugueis(response.data.alugueis); 
         } catch (err) {
             console.error("Erro ao buscar aluguéis do cliente: ", err);
             alert("Erro ao buscar aluguéis do cliente");
@@ -33,19 +33,24 @@ function AlugueisClientePage() {
 
     const fecharStatus = async (aluguelId) => {
         try {
+
             const token = localStorage.getItem("token");
+
             if (!token) {
                 alert("Token não encontrado");
                 return;
             }
+
             await api.put(`/alugueis/status/${aluguelId}`, { status: "fechado" }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            alert("Status do aluguel fechado com sucesso!");
+
+            alert(" aluguel fechado com sucesso!");
             getAllAlugueisCliente();
         } catch (err) {
-            console.error("Erro ao fechar status do aluguel: ", err);
-            alert("Erro ao fechar status do aluguel");
+
+            console.error("Erro ao fechar status do aluguel: ", err.response.data);
+            alert(err.response.data.message);
         }
     };
 
@@ -68,7 +73,7 @@ function AlugueisClientePage() {
             doc.text("-------------------------------------", 50, 25);
 
             const data = new Date().toLocaleString();
-            
+
             doc.setFont("helvetica", "normal");
             doc.text(`Emissão: ${data}`, 10, 30);
             doc.text(`Fone: ${aluguel.telefone}`, 60, 30);
@@ -141,28 +146,43 @@ function AlugueisClientePage() {
                     </thead>
                     <tbody>
                         {alugueis
-                        .sort((a) => a.status === "fechado" ? 1 : -1)
-                        .map(aluguel =>
-                            aluguel.itens.map(item => (
-                                <tr key={`${aluguel.idAluguel}-${item.id}`} className="text-center">
-                                    <td>{aluguel.nomeCliente}</td>
-                                    <td className={aluguel.status === "fechado" ? "text-danger" : "text-success"}>{aluguel.status}</td>
-                                    <td>{item.peca}</td>
-                                    <td>{item.quantidade}</td>
-                                    <td>{formatData(aluguel.dataInicio)}</td>
-                                    <td>{formatData(aluguel.dataFim)}</td>
-                                    <td>{aluguel.quantidadeDias}</td>
-                                    <td>{formatCurrency(aluguel.quantidadeDias *  item.quantidade * item.precoUnitario)}</td>
-                                    <td>
-                                        <button className="btn btn-danger btn-sm me-2" onClick={() => fecharStatus(aluguel.idAluguel)}>❌</button>
-                                
-                                    </td>
-                                    <td>
-                                    <button className="btn btn-primary btn-sm" onClick={() => imprimirPDF(aluguel)}>🖨️</button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
+                            .sort((a) => a.status === "fechado" ? 1 : -1)
+                            .map(aluguel =>
+                                aluguel.itens.map(item => {
+
+                                    let precoUnitario = item.precoUnitario
+
+                                    if (aluguel.quantidadeDias > 30) {
+                                                                precoUnitario = 0.60;
+                                    } else if (aluguel.quantidadeDias > 15) {
+                                        precoUnitario = 0.80;
+                                    } else {
+                                        precoUnitario = item.precoUnitario; // Mantém o valor original
+                                    }
+
+                                    return (
+                                        <tr key={`${aluguel.idAluguel}-${item.id}`} className="text-center">
+                                            <td>{aluguel.nomeCliente}</td>
+                                            <td className={aluguel.status === "fechado" ? "text-danger" : "text-success"}>{aluguel.status}</td>
+                                            <td>{item.peca}</td>
+                                            <td>{item.quantidade}</td>
+                                            <td>{formatData(aluguel.dataInicio)}</td>
+                                            <td>{formatData(aluguel.dataFim)}</td>
+                                            <td>{aluguel.quantidadeDias}</td>
+                                            <td>{formatCurrency(precoUnitario * item.quantidade * aluguel.quantidadeDias)}</td>
+                                            <td>
+                                                <button className="btn btn-danger btn-sm me-2" onClick={() => fecharStatus(aluguel.idAluguel)}>❌</button>
+
+                                            </td>
+                                            <td>
+                                                <button className="btn btn-primary btn-sm" onClick={() => imprimirPDF(aluguel)}>🖨️</button>
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+
+                                ))
+                        }
                     </tbody>
                 </table>
             </div>
