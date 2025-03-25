@@ -202,9 +202,16 @@ function HomePage() {
               </Col>
               <Col md={3} className="d-flex align-items-end">
                 <Button variant="primary" onClick={buscarClientes}>
-                  Buscar
+                <i className="bi bi-search me-2"></i> 
+                </Button>
+      
+              </Col>
+              <Col md={3} className="d-flex align-items-end">
+                <Button variant="primary" onClick={() => navigate('/clientes/cadastro')}>
+                  <i className="bi bi-plus me-2"></i> 
                 </Button>
               </Col>
+              
             </Row>
 
             {/* Exibir lista de clientes encontrados */}
@@ -224,7 +231,7 @@ function HomePage() {
 
             <Row className="mb-3">
               <Col md={2}>
-                <Form.Label>ID do Cliente</Form.Label>
+                <Form.Label> Cliente</Form.Label>
 
                 <Form.Control
                   type="number"

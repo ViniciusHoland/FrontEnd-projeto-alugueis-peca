@@ -134,6 +134,8 @@ function AlugueisClientePage() {
                             <th>Quantidade</th>
                             <th>Data Entrega</th>
                             <th>Data Saída</th>
+                            <th>Quat. Dias</th>
+                            <th>Valor</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -149,6 +151,8 @@ function AlugueisClientePage() {
                                     <td>{item.quantidade}</td>
                                     <td>{formatData(aluguel.dataInicio)}</td>
                                     <td>{formatData(aluguel.dataFim)}</td>
+                                    <td>{aluguel.quantidadeDias}</td>
+                                    <td>{formatCurrency(aluguel.quantidadeDias *  item.quantidade * item.precoUnitario)}</td>
                                     <td>
                                         <button className="btn btn-danger btn-sm me-2" onClick={() => fecharStatus(aluguel.idAluguel)}>❌</button>
                                 
